@@ -22,7 +22,7 @@
 </head>
 <body>
   <div id="displayArea">
-    <span>0</span>
+    <span id="output">0</span>  <!-- couldn't get it to work without id? -->
   </div>
 </body>
 <script type="text/javascript">
@@ -32,37 +32,51 @@ http://youtu.be/TtMHhqrYf90
 
 	var counter = 0;
 	var timerID = null;
-	$("#displayArea").on('click',/*give the click handler a function that will increase the counter*/);
-	$("#displayArea").on('mouseout',handleMouseout);
+	$("#displayArea").on('click', increaseCounter); // so why do i not need (); at increaseCounter. and why does that mess up my code?
+	$("#displayArea").on('mouseout',handleMouseout); // is this jquery methods???? how do you tell the difference?? the $?
 	$("#displayArea").on('mouseover',handleMouseover);
 
-
+    //var element = document.querySelector('#output'); //should i be using $('#ouput')??? would it have worked as '#displayArea span' ???
 
 	function increaseCounter(){
+	    counter++;
+	    updateDisplay();
 	  //increase the counter global variable by 1, then save the value back into counter
 	  //call the function that updates the span in the displayArea div
 	}
 
 	function decreaseCounter(){
-	  {//if the counter global variable is less than or equal to 0
-	    //call the handleMouseover function
-	    //set the counter global variable to 0
-	    //exit the function
+	  if (counter <=0){
+	      handleMouseover();
+	      counter = 0
+	      //if the counter global variable is less than or equal to 0
+          //call the handleMouseover function
+          //set the counter global variable to 0
+          //exit the function
+          return //this will exit the function so it does not run the rest.
 	  }
+	  counter--;
+	  updateDisplay();
 	  //decrease the counter by one, and save the result back into the counter variable
 	  //call the updateDisplay function
 	}
 
 	function updateDisplay(){
+        //element.innerHTML = counter; // should this have been $('#displayArea span').innerHTML = counter; ???
+        document.querySelector('#displayArea span').innerHTML = counter; //dom method queryselector takes css selector exactly.
 	  //change the text of the span inside the div.  The div has an id of displayArea.  The text will be changed to the value currently inside the global variable of counter
 	}
 
 	function handleMouseout()
 	{
-	  //call the setInterval function (it is a default function, not one defined here).  pass in the following 2 parameters: the name of the function that decreases the counter, and 500.   setInterval returns a value, save that value in the global variable "timerID"
+	    timerID = setInterval(decreaseCounter, 500);
+	   //call the setInterval function (it is a default function, not one defined here).
+        // pass in the following 2 parameters: the name of the function that decreases the counter, and 500.
+        // setInterval returns a value, save that value in the global variable "timerID"
 	}
 
 	function handleMouseover(){
+	    clearTimeout(timerID)
 		//call the clearTimeout function (not defined here, it is available by default.  pass in the global variable timerID as an argument
 	}	
 </script>
